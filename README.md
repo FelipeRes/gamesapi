@@ -1,6 +1,6 @@
 # GamesAPI
 Este projeto tem como objetivo realizar uma comparação entre a implementação de validação na diretamente na View ou usilizar métodos de validação no Django Rest Framework.
-**OBSERVAÇÃO:** O cada uma das implementações encontram-seem branch separados. O *master* apresenta apenas o código sem validação.
+**OBSERVAÇÃO:** Cada uma das implementações encontram-se em branch separados. O *master* apresenta apenas o código sem validação.
 
 # Validações na View
 Esse tipo de validação é realizada diretamente nas implementações de funções. Ela consiste em analisar os dados da requisição, seja ela um POST ou um PUT e verificar se esses dados são válidos. Caso contrário, será retornado um erro com uma informação do que está errado.
