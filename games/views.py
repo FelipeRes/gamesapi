@@ -14,8 +14,15 @@ def game_list(request):
 		games_serializer = GameSerializer(games, many=True)
 		return Response(games_serializer.data)
 	elif request.method == 'POST':
-		if not validate(request):
-			return Response('Ococrreu algum erro', status=status.HTTP_400_BAD_REQUEST)
+		if not_null_validation('name', request.data.get('name')):
+			return Response("name não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
+		if not_null_validation('game_category', request.data.get('game_category')):
+			return Response("game_category não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
+		if not_null_validation('release_date', request.data.get('release_date')):
+			return Response("release_date não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
+		if name_validation(request.data.get('name')):
+			return Response("já existe um jog com esse nome cadastrado", status=status.HTTP_400_BAD_REQUEST)
+
 		games_serializer = GameSerializer(data=request.data)
 		if games_serializer.is_valid():
 			games_serializer.save()
@@ -32,12 +39,15 @@ def game_detail(request, pk):
 		games_serializer = GameSerializer(game)
 		return Response(games_serializer.data)
 	elif request.method == 'PUT':
-		if not validate(request):
-			return Response('Ococrreu algum erro', status=status.HTTP_400_BAD_REQUEST)	
-		games_serializer = GameSerializer(game, data=request.data)
-		if games_serializer.name == None or games_serializer.name == "":
-			return Response(games_serializer.erros, status=status.HTTP_400_BAD_REQUEST)			
-
+		if not_null_validation('name', request.data.get('name')):
+			return Response("name não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
+		if not_null_validation('game_category', request.data.get('game_category')):
+			return Response("game_category não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
+		if not_null_validation('release_date', request.data.get('release_date')):
+			return Response("release_date não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
+		if name_validation(request.data.get('name')):
+			return Response("já existe um jog com esse nome cadastrado", status=status.HTTP_400_BAD_REQUEST)
+		games_serializer = GameSerializer(game, data=request.data)		
 		if games_serializer.is_valid():
 			games_serializer.save()
 			return Response(games_serializer.data)
@@ -48,29 +58,14 @@ def game_detail(request, pk):
 			return Response(status=status.HTTP_204_NO_CONTENT)
 		return Response("Você não pode deletar um jogo que ainda não foi lançado", status=status.HTTP_400_BAD_REQUEST)
 
-def validate(request):
-	if not not_null_validation('name', request.data.get('name')):
-		return False
-	if not not_null_validation('game_category', request.data.get('game_category')):
-		return False
-	if not not_null_validation('release_date', request.data.get('release_date')):
-		return False
-	if not name_validation(request.data.get('name')):
-		return False
-	return True
-
 def name_validation(name):
-	print(name)
 	list_of_names = Game.objects.all().values('name')
 	for n in list_of_names:
-		print(name + " == " + n['name'])
 		if name == n['name']:
-			print('Retorna o erro porra')
-			return False
-	return True
+			return True
+	return False
 
 def not_null_validation(nome_campo, campo):
 	if campo == None or campo == "":
-		return Response(nome_campo+" não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
-		return False
-	return True
+		return True
+	return False
