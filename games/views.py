@@ -14,11 +14,11 @@ def game_list(request):
 		games_serializer = GameSerializer(games, many=True)
 		return Response(games_serializer.data)
 	elif request.method == 'POST':
-		if not_null_validation('name', request.data.get('name')):
+		if not_null_validation(request.data.get('name')):
 			return Response("name não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
-		if not_null_validation('game_category', request.data.get('game_category')):
+		if not_null_validation(request.data.get('game_category')):
 			return Response("game_category não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
-		if not_null_validation('release_date', request.data.get('release_date')):
+		if not_null_validation(request.data.get('release_date')):
 			return Response("release_date não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
 		if name_validation(request.data.get('name')):
 			return Response("já existe um jog com esse nome cadastrado", status=status.HTTP_400_BAD_REQUEST)
@@ -39,11 +39,11 @@ def game_detail(request, pk):
 		games_serializer = GameSerializer(game)
 		return Response(games_serializer.data)
 	elif request.method == 'PUT':
-		if not_null_validation('name', request.data.get('name')):
+		if not_null_validation(request.data.get('name')):
 			return Response("name não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
-		if not_null_validation('game_category', request.data.get('game_category')):
+		if not_null_validation(request.data.get('game_category')):
 			return Response("game_category não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
-		if not_null_validation('release_date', request.data.get('release_date')):
+		if not_null_validation(request.data.get('release_date')):
 			return Response("release_date não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
 		if name_validation(request.data.get('name')):
 			return Response("já existe um jog com esse nome cadastrado", status=status.HTTP_400_BAD_REQUEST)
@@ -65,7 +65,7 @@ def name_validation(name):
 			return True
 	return False
 
-def not_null_validation(nome_campo, campo):
-	if campo == None or campo == "":
+def not_null_validation(field):
+	if field == None or field == "":
 		return True
 	return False
