@@ -6,19 +6,19 @@ Esse tipo de validação é realizada diretamente nas implementações de funç�
 Este exemplo implementa Django Rest Framework e os dados das requisições são recebidos em JSON. Para se verifica cada um dos dados da requisição, se utiliza *request.data* ao ivés de *request.POST*.
 Este é um método que avalia os campos nulos:
 ```python
-def not_null_validation(nome_campo, campo):
-	if campo == None or campo == "":
+def not_null_validation(field):
+	if field == None or field == "":
 		return False
 	return True
 ```
 Implementação:
 ```python
 if request.method == 'POST':
-		if not not_null_validation('name', request.data.get('name')):
+		if not not_null_validation(request.data.get('name')):
 			return Response("name não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
-		if not not_null_validation('game_category', request.data.get('game_category')):
+		if not not_null_validation(request.data.get('game_category')):
 			return Response("game_category não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
-		if not not_null_validation('release_date', request.data.get('release_date')):
+		if not not_null_validation(request.data.get('release_date')):
 			return Response("release_date não pode ser nulo", status=status.HTTP_400_BAD_REQUEST)
 ```
 
