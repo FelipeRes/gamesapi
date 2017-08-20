@@ -34,6 +34,8 @@ def game_detail(request, pk):
 			return Response(games_serializer.data)
 		return Response(games_serializer.erros, status=status.HTTP_400_BAD_REQUEST)
 	elif request.method == 'DELETE':
-		game.delete()
+		games_serializer = GameSerializer(data=request.data)
+		if games_serializer.can_delete(game.release_date):
+			game.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
